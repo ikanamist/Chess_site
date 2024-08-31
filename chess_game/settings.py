@@ -79,7 +79,11 @@ WSGI_APPLICATION = "chess_game.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {"default": dj_database_url.config(default="postgres://localhost")}
+DATABASES = {
+    "default": dj_database_url.config(
+        default="postgres://localhost:5432/mydb", conn_max_age=600, ssl_require=True
+    )
+}
 
 
 # Password validation
