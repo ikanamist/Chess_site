@@ -36,6 +36,14 @@
         <!-- Move form -->
         <div class="col-md-4">
             <div class="d-flex justify-content-center flex-column">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mt-3" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
                 {% if game.status == 'active' %}
                     {% if game.turn == 'white' and request.user == game.player_white %}
                         <h2>Your Turn (White)</h2>

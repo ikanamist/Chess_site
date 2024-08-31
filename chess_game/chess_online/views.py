@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from .forms import UserRegisterForm
 import chess
 from django.db.models import Q
+from django.contrib import messages
 
 
 def register(request):
@@ -94,12 +95,14 @@ def make_move(request, game_id):
 
     # Проверка, что игра активна
     if game.status != "active":
+        messages.error(request, "The game is no longer active.")
         return redirect("game_detail", game_id=game.id)
 
     # Проверка, что это ход текущего игрока
     if (game.turn == "white" and request.user != game.player_white) or (
         game.turn == "black" and request.user != game.player_black
     ):
+        messages.error(request, "It's not your turn to move.")
         return redirect("game_detail", game_id=game.id)
 
     # Обработка POST-запроса для выполнения хода
@@ -108,6 +111,7 @@ def make_move(request, game_id):
         to_square = request.POST.get("to_square")
 
         if not from_square or not to_square:
+            messages.error(request, "Both 'from' and 'to' squares must be specified.")
             return redirect("game_detail", game_id=game.id)
 
         board = chess.Board(game.fen)
@@ -115,6 +119,9 @@ def make_move(request, game_id):
         try:
             move = chess.Move.from_uci(from_square + to_square)
         except ValueError:
+            messages.error(
+                request, "Invalid move format. Please use a valid move notation."
+            )
             return redirect("game_detail", game_id=game.id)
 
         if move in board.legal_moves:
@@ -127,9 +134,18 @@ def make_move(request, game_id):
                 game.status = "white_won" if game.turn == "black" else "black_won"
                 game.save()
                 adjust_ratings(game)
+                messages.success(
+                    request,
+                    f"Checkmate! {'White' if game.status == 'white_won' else 'Black'} wins!",
+                )
             elif board.is_stalemate() or board.is_insufficient_material():
                 game.status = "draw"
                 game.save()
+                messages.info(request, "The game is a draw.")
+
+        else:
+            messages.error(request, "Invalid move. Please try again.")
+            return redirect("game_detail", game_id=game.id)
 
         return redirect("game_detail", game_id=game.id)
 
