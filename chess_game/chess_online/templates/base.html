@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chess Game{% endblock %}</title>
+    <!-- Подключение Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ваши кастомные стили -->
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+            padding-top: 60px;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .container {
+            height: 100%;
+            max-width: 960px;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .chess-board-container {
+            margin-right: 20px; /* Отступ справа для формы */
+        }
+        
+        .move-form-container {
+            max-width: 300px; /* Установите максимальную ширину для формы */
+        }
+        
+        .chess-board td {
+            width: 44px; 
+            height: 44px; 
+            text-align: center;
+            vertical-align: middle;
+            font-size: 28px; 
+        }
+        
+        .chess-board .dark {
+            background-color: #8b4513; /* Темный цвет */
+        }
+        
+        .chess-board .light {
+            background-color: #f0d9b5; /* Светлый цвет */
+        }
+        
+        .chess-board .label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .row {
+            height: 100%;
+            display:flex;
+            align-items:center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Chess Game</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'leaders' %}">Leaders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'active_games' %}">My Games</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'game_history' %}">History</a>
+                        </li>
+                        <li class="nav-item">
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Подключение Bootstrap JS и Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

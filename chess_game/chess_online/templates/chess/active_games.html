@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Активные игры{% endblock %}
+
+{% block content %}
+<h1>Ваши активные игры</h1>
+<ul>
+    {% for game in games %}
+        <li>
+            <a href="{% url 'game_detail' game.id %}">
+                Игра между {{ game.player_white.username }} и {{ game.player_black.username }}
+                (Ваш ход: {{ game.turn }})
+            </a>
+        </li>
+    {% empty %}
+        <li>У вас нет активных игр.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

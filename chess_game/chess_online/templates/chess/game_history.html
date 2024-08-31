@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}История игр{% endblock %}
+
+{% block content %}
+<h1>История игр</h1>
+<ul>
+    {% for game in games %}
+        <li>
+            <a href="{% url 'game_detail' game.id %}">
+                Игра между {{ game.player_white.username }} и {{ game.player_black.username }}
+                (Статус: {{ game.status }})
+            </a>
+        </li>
+    {% empty %}
+        <li>У вас нет завершенных игр.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Chess Game{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Chess board -->
+        <div class="col-md-8 d-flex justify-content-center">
+            <div class="chess-board">
+                <table class="table table-borderless">
+                    {% for row_label, row in board %}
+                    <tr>
+                        <!-- Подписи для горизонталей (1-8) слева -->
+                        <td class="label">{{ row_label }}</td>
+                        {% for square in row %}
+                        <td class="{{ square.color }}">
+                            {% if square.piece %}
+                                {{ square.piece }}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <!-- Подписи для вертикалей (a-h) снизу -->
+                    <tr>
+                        <td class="label"></td>
+                        {% for letter in "abcdefgh" %}
+                        <td class="label">{{ letter }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Move form -->
+        <div class="col-md-4">
+            <div class="d-flex justify-content-center flex-column">
+                {% if game.status == 'active' %}
+                    {% if game.turn == 'white' and request.user == game.player_white %}
+                        <h2>Your Turn (White)</h2>
+                        <form method="post" action="{% url 'make_move' game.id %}" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group mb-2">
+                                <label for="from_square" class="form-label">From:</label>
+                                <input type="text" id="from_square" name="from_square" class="form-control mx-2" placeholder="e2" required>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="to_square" class="form-label">To:</label>
+                                <input type="text" id="to_square" name="to_square" class="form-control mx-2" placeholder="e4" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-4 align-items-center d-flex justify-content-center w-100">Make Move</button>
+                        </form>
+                    {% elif game.turn == 'black' and request.user == game.player_black %}
+                        <h2>Your Turn (Black)</h2>
+                        <form method="post" action="{% url 'make_move' game.id %}" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group mb-2">
+                                <label for="from_square" class="form-label">From:</label>
+                                <input type="text" id="from_square" name="from_square" class="form-control mx-2" placeholder="e7" required>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="to_square" class="form-label">To:</label>
+                                <input type="text" id="to_square" name="to_square" class="form-control mx-2" placeholder="e5" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-4 align-items-center d-flex justify-content-center w-100">Make Move</button>
+                        </form>
+                    {% else %}
+                        <p>Waiting for the other player's move...</p>
+                    {% endif %}
+                {% else %}
+                    <p>The game is over. Status: <strong>{{ game.status }}</strong></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1>Welcome, {{ user_profile.user.username }}!</h1>
+    <p>Your current rating: <strong>{{ user_profile.rating }}</strong></p>
+
+    <form method="get" action="{% url 'search' %}" class="form-inline justify-content-center my-4">
+        <label for="search" class="mr-2">Search for an opponent:</label>
+        <input type="text" id="search" name="q" class="form-control mr-2 mt-3" placeholder="Enter username" value="{{ query }}">
+        <button type="submit" class="btn btn-success mt-3">Search</button>
+    </form>
+
+    {% if opponents %}
+        <h3 class="mt-4">Search Results:</h3>
+        <ul class="list-group mt-3">
+            {% for opponent in opponents %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ opponent.username }}
+                    {% if opponent.id in active_games %}
+                        <span class="badge bg-warning text-dark">Active Game</span>
+                    {% else %}
+                        <a href="{% url 'new_game' %}?opponent_id={{ opponent.id }}" class="btn btn-primary btn-sm">Start Game</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

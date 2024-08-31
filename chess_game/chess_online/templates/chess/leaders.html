@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Лидеры рейтинга{% endblock %}
+
+{% block content %}
+<h1>Лидеры рейтинга</h1>
+<ol>
+    {% for player in top_players %}
+    <li>{{ player.user.username }} - Рейтинг: {{ player.rating }}</li>
+    {% endfor %}
+</ol>
+{% endblock %}
