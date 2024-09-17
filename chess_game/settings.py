@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-#ip5qcr$c*jqc=&zemk$-5o^dh*foa8ilx3v&s37(l56qioq9e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["your-elastic-beanstalk-url", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -77,17 +77,8 @@ WSGI_APPLICATION = "chess_game.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv(
-            "DJANGO_DB_NAME", "db.sqlite3"
-        ),  # Используйте PostgreSQL, если переменные окружения установлены
-        "USER": os.getenv("DJANGO_DB_USER", ""),
-        "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", ""),
-        "HOST": os.getenv("DJANGO_DB_HOST", ""),
-        "PORT": "5432",
-        "OPTIONS": {
-            "client_encoding": "utf8",
-        },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 

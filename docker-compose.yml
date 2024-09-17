@@ -6,13 +6,6 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      - DJANGO_DB_NAME=mydatabase
-      - DJANGO_DB_USER=myuser
-      - DJANGO_DB_PASSWORD=mypassword
-      - DJANGO_DB_HOST=db
 
   db:
     image: postgres:16
