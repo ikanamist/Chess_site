@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'
+        python-version: '3.12.1'
 
     - name: Install dependencies
       run: |
@@ -29,5 +29,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         pip install awsebcli
-        eb init -p python-3.9 my-eb-app --region eu-central-1
+        eb init -p python-3.12.1 my-eb-app --region eu-central-1
         eb deploy
